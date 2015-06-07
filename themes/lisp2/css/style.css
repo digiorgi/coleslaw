@@ -24,7 +24,7 @@ tt { font-size: .9em; font-family: (unquote mono-font) }
 .paste:hover { background-color: #F4F4F4; color: black; }
 .symbol { color : #770055; background-color : transparent; border: 0px; margin: 0px;}
 .special { color : #FF5000; background-color : inherit; }
-.keyword { color : #770000; background-color : inherit; }
+.keyword { color : #008900; background-color : inherit; }
 .comment { color : #007777; background-color : inherit; }
 .string { color : #777777; background-color : inherit; }
 .atom { color : #314F4F; background-color : inherit; }
