@@ -69,18 +69,29 @@ are in the plugins folder in coleslaw's source directory."
     (destructuring-bind (name &rest args) plugin
       (enable-plugin name args))))
 
-(defun discover-config-path (repo-path)
+(defun get-config-file-name (config-variation)
+  "Returns the configuration file name spected for a CONFIG-VARIATION, if the
+   variation is deploy the config file will be .coleslawrc-deploy"
+  (let ((coleslawrc ".coleslawrc"))
+    (cond ((or (not config-variation)
+               (every (lambda (chr) (equalp chr #\Space)) config-variation))
+           coleslawrc)
+          (t (concatenate 'string coleslawrc "-" config-variation)))))
+
+(defun discover-config-path (repo-path config-variation)
   "Check the supplied REPO-PATH for a .coleslawrc and if one
 doesn't exist, use the .coleslawrc in the home directory."
-  (let ((repo-config (rel-path repo-path ".coleslawrc")))
+  (let* ((coleslawrc (get-config-file-name config-variation))
+         (repo-config (rel-path repo-path coleslawrc)))
     (if (file-exists-p repo-config)
         repo-config
-        (rel-path (user-homedir-pathname) ".coleslawrc"))))
+        (rel-path (user-homedir-pathname) coleslawrc))))
 
-(defun load-config (&optional (repo-dir ""))
+(defun load-config (&optional (repo-dir "") (config-variation ""))
   "Find and load the coleslaw configuration from .coleslawrc. REPO-DIR will be
 preferred over the home directory if provided."
-  (with-open-file (in (discover-config-path repo-dir) :external-format :utf-8)
+  (with-open-file (in (discover-config-path repo-dir config-variation)
+                      :external-format :utf-8)
     (let ((config-form (read in)))
       (setf *config* (construct 'blog config-form)
             (repo-dir *config*) repo-dir)))

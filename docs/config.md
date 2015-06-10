@@ -33,3 +33,21 @@ There are also many *optional* config parameters such as:
 * `:staging-dir`   => for Coleslaw to do intermediate work, default: "/tmp/coleslaw"
 
 [plugin-use]: https://github.com/redline6561/coleslaw/blob/master/docs/plugin-use.md
+
+## Variations
+Sometimes you will also need different configurations for each phase in your
+writing, for example if you have two configurations one for local writing, and
+other for deployment to a external server. For this reason coleslaw support
+*variations*, and it means that can load different configuration files for the
+same projects.
+
+The configuration files are named `.coleslawrc-[variation]`. The variation can
+be specified as a keyword argument in the function `coleslaw:main`, like this:
+
+~~~
+(coleslaw:main "/path/to/my/project/" :config-variation "deploy")
+~~~
+
+The last code will search first for `/path/to/my/project/.coleslawrc-deploy`.
+If not `:config-variation` is specified the default `.coleslawrc` will be
+searched.
